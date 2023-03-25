@@ -1,0 +1,13 @@
+  123  resourceSuffix=$RANDOM
+  124  webName="tailspin-space-game-web-${resourceSuffix}"
+  125  registryName="tailspinspacegame${resourceSuffix}"
+  126  rgName='tailspin-space-game-rg'
+  127  planName='tailspin-space-game-asp'
+  128  az group create --name $rgName
+  129  az acr create --name $registryName   --resource-group $rgName   --sku Standard   --admin-enabled true
+  130  az appservice plan create   --name $planName   --resource-group $rgName   --sku B1   --is-linux
+  131  az webapp create   --name $webName   --resource-group $rgName   --plan $planName   --deployment-container-image-name $registryName.azurecr.io/web:latest
+  132  az webapp list   --resource-group $rgName   --query "[].{hostName: defaultHostName, state: state}"   --output table
+  133  az acr list   --resource-group $rgName   --query "[].{loginServer: loginServer}"   --output table
+  134  az group delete --name tailspin-space-game-rg
+
